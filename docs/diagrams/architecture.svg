@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b6b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" fill="#faf7f0"/>
+  <text x="40" y="44" font-size="24" font-weight="700" fill="#1f2937">KamgarSaathi — system architecture</text>
+  <text x="40" y="70" font-size="14" fill="#6b7280">Marathi-first gate agent for Maharashtra construction and gig workers · ACE Builders 2026, PS5</text>
+
+  <!-- Layer 1: people -->
+  <text x="40" y="112" font-size="12" font-weight="700" letter-spacing="2" fill="#9a8c73">PEOPLE</text>
+  <g>
+    <rect x="40" y="124" width="520" height="76" rx="10" fill="#ffffff" stroke="#e5e0d5" stroke-width="1.5"/>
+    <text x="64" y="152" font-size="15" font-weight="700" fill="#1f2937">Construction / gig worker</text>
+    <text x="64" y="176" font-size="13" fill="#4b5563">Tells their story in Marathi, or taps a sample persona. Never pays.</text>
+  </g>
+  <g>
+    <rect x="640" y="124" width="520" height="76" rx="10" fill="#ffffff" stroke="#e5e0d5" stroke-width="1.5"/>
+    <text x="664" y="152" font-size="15" font-weight="700" fill="#1f2937">CSC / Setu operator &amp; contractor — the payers</text>
+    <text x="664" y="176" font-size="13" fill="#4b5563">Pay per completed onboarding. Every worker past a gate is revenue.</text>
+  </g>
+  <line x1="300" y1="200" x2="300" y2="228" stroke="#5b6b6b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="900" y1="200" x2="900" y2="228" stroke="#5b6b6b" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+
+  <!-- Layer 2: app -->
+  <text x="40" y="254" font-size="12" font-weight="700" letter-spacing="2" fill="#9a8c73">APP — NEXT.JS (APP ROUTER) · TYPESCRIPT · TAILWIND</text>
+  <rect x="40" y="266" width="1120" height="168" rx="12" fill="#0f4c4c"/>
+  <text x="64" y="296" font-size="15" font-weight="700" fill="#ffffff">KamgarSaathi — 8 screens, one flow</text>
+  <text x="64" y="318" font-size="13" fill="#cde3df">Story intake · rule engine · gate proof · scheme stack · documents · renewal · application pack · tracker</text>
+  <g>
+    <rect x="64" y="336" width="330" height="76" rx="8" fill="#ffffff"/>
+    <text x="80" y="362" font-size="13" font-weight="700" fill="#1f2937">Rule engine — deterministic</text>
+    <text x="80" y="382" font-size="12" fill="#4b5563">src/lib/ruleEngine.ts reads 12 rules</text>
+    <text x="80" y="399" font-size="12" fill="#4b5563">as data (src/data/schemes.json).</text>
+  </g>
+  <g>
+    <rect x="414" y="336" width="330" height="76" rx="8" fill="#ffffff"/>
+    <text x="430" y="362" font-size="13" font-weight="700" fill="#1f2937">Gate proof — show, don't claim</text>
+    <text x="430" y="382" font-size="12" fill="#4b5563">Certificate photo → extraction with</text>
+    <text x="430" y="399" font-size="12" fill="#4b5563">the crop shown next to each value.</text>
+  </g>
+  <g>
+    <rect x="764" y="336" width="330" height="76" rx="8" fill="#ffffff"/>
+    <text x="780" y="362" font-size="13" font-weight="700" fill="#1f2937">Verdicts — ✓ / ✗ / ? with reasons</text>
+    <text x="780" y="382" font-size="12" fill="#4b5563">“Likely eligible”, never “guaranteed”.</text>
+    <text x="780" y="399" font-size="12" fill="#4b5563">“?” names what to check — no guess.</text>
+  </g>
+  <line x1="300" y1="434" x2="300" y2="462" stroke="#5b6b6b" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="900" y1="434" x2="900" y2="462" stroke="#5b6b6b" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Layer 3: data / deploy -->
+  <text x="40" y="488" font-size="12" font-weight="700" letter-spacing="2" fill="#9a8c73">DATA &amp; DEPLOYMENT</text>
+  <g>
+    <rect x="40" y="500" width="350" height="76" rx="10" fill="#ffffff" stroke="#e5e0d5" stroke-width="1.5"/>
+    <text x="64" y="528" font-size="14" font-weight="700" fill="#1f2937">localStorage — on the device</text>
+    <text x="64" y="550" font-size="12" fill="#4b5563">Profile, checklist ticks, renewal date,</text>
+    <text x="64" y="566" font-size="12" fill="#4b5563">tracker statuses. No account, no login.</text>
+  </g>
+  <g>
+    <rect x="425" y="500" width="350" height="76" rx="10" fill="#ffffff" stroke="#e5e0d5" stroke-width="1.5"/>
+    <text x="449" y="528" font-size="14" font-weight="700" fill="#1f2937">MOCK_MODE — demo runs with no backend</text>
+    <text x="449" y="550" font-size="12" fill="#4b5563">Sample data in the browser. API routes and</text>
+    <text x="449" y="566" font-size="12" fill="#4b5563">Prisma models are in the repo, unused here.</text>
+  </g>
+  <g>
+    <rect x="810" y="500" width="350" height="76" rx="10" fill="#ffffff" stroke="#e5e0d5" stroke-width="1.5"/>
+    <text x="834" y="528" font-size="14" font-weight="700" fill="#1f2937">Render + GitHub</text>
+    <text x="834" y="550" font-size="12" fill="#4b5563">Live demo on Render (free tier).</text>
+    <text x="834" y="566" font-size="12" fill="#4b5563">Public repo, MIT licence.</text>
+  </g>
+</svg>
