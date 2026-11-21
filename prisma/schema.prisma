@@ -1,0 +1,354 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  female
+  male
+  other
+}
+
+enum Occupation {
+  construction
+  gig_delivery
+  domestic
+  street_vending
+  agriculture
+  other_unorganised
+}
+
+enum Area {
+  rural
+  urban
+}
+
+enum MarriageEvent {
+  first
+  repeat
+  none
+}
+
+enum ProfileSource {
+  persona
+  typed_story
+  csc_entry
+}
+
+enum AmountStatus {
+  verified
+  verify
+  none
+}
+
+enum StackGroup {
+  e_shram
+  insurance_pension
+  bocw_gate
+  bocw_benefit
+  parallel_state
+  fallback
+}
+
+enum SchemeStatus {
+  verified
+  partially_verified
+  verify
+}
+
+enum NewApplicationsStatus {
+  open
+  verify
+  already_enrolled_only
+}
+
+enum VerificationStatus {
+  verified
+  verify
+}
+
+enum ExtractionStatus {
+  pending
+  extracted
+  failed
+  confirmed
+}
+
+enum CertificateField {
+  days_worked
+  period_start
+  period_end
+  issuer_name
+}
+
+enum EmploymentStatus {
+  employed
+  left
+}
+
+model Persona {
+  id                    String         @id @default(uuid()) @db.Uuid
+  createdAt             DateTime       @default(now()) @map("created_at")
+  updatedAt             DateTime       @updatedAt @map("updated_at")
+  name                  String         @unique @map("name")
+  age                   Int            @map("age")
+  gender                Gender         @map("gender")
+  work                  String         @map("work")
+  place                 String         @map("place")
+  occupation            Occupation     @map("occupation")
+  state                 String         @default("Maharashtra") @map("state")
+  constructionDaysLast12Months Int     @default(0) @map("construction_days_last_12_months")
+  hasBankAccount        Boolean        @default(false) @map("has_bank_account")
+  epfoEsic              Boolean        @default(false) @map("epfo_esic")
+  incomeTaxPayer        Boolean        @default(false) @map("income_tax_payer")
+  monthlyIncome         Decimal        @db.Decimal(12, 2) @map("monthly_income")
+  married               Boolean        @default(false) @map("married")
+  schoolGoingChildren   Int            @default(0) @map("school_going_children")
+  bocwRegistered        Boolean        @default(false) @map("bocw_registered")
+  storyText             String         @db.Text @map("story_text")
+  isSample              Boolean        @default(true) @map("is_sample")
+  familyIncomeYearly    Int?           @map("family_income_yearly")
+  aadhaarLinkedBank     Boolean?       @map("aadhaar_linked_bank")
+  govtEmployeeFamily    Boolean?       @map("govt_employee_family")
+  nps                   Boolean?       @map("nps")
+  area                  String?        @map("area")
+  registrationActive    Boolean?       @map("registration_active")
+  marriageEvent         String?        @map("marriage_event")
+  willingUnskilledWork  Boolean?       @map("willing_unskilled_work")
+
+  sourcedProfiles       Profile[]      @relation("ProfileSourcePersona")
+
+  @@map("personas")
+}
+
+model Profile {
+  id                    String         @id @default(uuid()) @db.Uuid
+  createdAt             DateTime       @default(now()) @map("created_at")
+  updatedAt             DateTime       @updatedAt @map("updated_at")
+  name                  String?        @map("name")
+  age                   Int            @map("age")
+  gender                Gender?        @map("gender")
+  occupation            Occupation     @map("occupation")
+  state                 String         @default("Maharashtra") @map("state")
+  area                  Area?          @map("area")
+  constructionDaysLast12Months Int     @default(0) @map("construction_days_last_12_months")
+  hasBankAccount        Boolean        @default(false) @map("has_bank_account")
+  bankAccountNumber     String?        @map("bank_account_number")
+  aadhaarNumber         String?        @map("aadhaar_number")
+  aadhaarLinkedBank     Boolean        @default(false) @map("aadhaar_linked_bank")
+  epfoEsic              Boolean        @default(false) @map("epfo_esic")
+  nps                   Boolean        @default(false) @map("nps")
+  incomeTaxPayer        Boolean        @default(false) @map("income_tax_payer")
+  govtEmployeeFamily    Boolean        @default(false) @map("govt_employee_family")
+  monthlyIncome         Decimal?       @db.Decimal(12, 2) @map("monthly_income")
+  familyIncomeYearly    Decimal?       @db.Decimal(14, 2) @map("family_income_yearly")
+  married               Boolean        @default(false) @map("married")
+  marriageEvent         MarriageEvent? @map("marriage_event")
+  schoolChildrenCount   Int            @default(0) @map("school_children_count")
+  mahabocwRegistered    Boolean        @default(false) @map("mahabocw_registered")
+  registrationActive    Boolean        @default(false) @map("registration_active")
+  willingUnskilledWork  Boolean        @default(false) @map("willing_unskilled_work")
+  storyText             String?        @db.Text @map("story_text")
+  source                ProfileSource  @default(typed_story) @map("source")
+  sourcePersonaId       String?        @map("source_persona_id") @db.Uuid
+  isSample              Boolean        @default(false) @map("is_sample")
+  isConfirmed           Boolean        @default(false) @map("is_confirmed")
+  confirmedAt           DateTime?      @map("confirmed_at")
+  editedFields          Json?          @map("edited_fields")
+  accessToken           String?        @unique @map("access_token")
+
+  sourcePersona         Persona?       @relation("ProfileSourcePersona", fields: [sourcePersonaId], references: [id], onDelete: SetNull)
+  renewalReminder       RenewalReminder?
+  certificates          Certificate[]  @relation("ProfileCertificates")
+  documentTicks         DocumentTick[] @relation("ProfileDocumentTicks")
+
+  @@index([sourcePersonaId])
+  @@map("profiles")
+}
+
+model RenewalReminder {
+  id                    String    @id @default(uuid()) @db.Uuid
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+  profileId             String    @unique @map("profile_id") @db.Uuid
+  registrationDate      DateTime? @db.Date @map("registration_date")
+  renewalDueDate        DateTime? @db.Date @map("renewal_due_date")
+
+  profile               Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@map("renewal_reminders")
+}
+
+model Scheme {
+  id                    String                @id @default(uuid()) @db.Uuid
+  createdAt             DateTime              @default(now()) @map("created_at")
+  updatedAt             DateTime              @updatedAt @map("updated_at")
+  code                  String                @unique @map("code")
+  nameEn                String                @map("name_en")
+  nameMr                String                @map("name_mr")
+  benefitEn             String                @db.Text @map("benefit_en")
+  benefitAmount         Decimal?              @db.Decimal(12, 2) @map("benefit_amount")
+  amountStatus          AmountStatus          @default(none) @map("amount_status")
+  stackPosition         Int                   @map("stack_position")
+  stackGroup            StackGroup            @map("stack_group")
+  stackReasonEn         String                @db.Text @map("stack_reason_en")
+  stackReasonMr         String                @db.Text @map("stack_reason_mr")
+  applyAt               String                @db.Text @map("apply_at")
+  officialSource        String                @db.Text @map("official_source")
+  lastVerified          DateTime              @db.Date @map("last_verified")
+  status                SchemeStatus          @default(verify) @map("status")
+  newApplicationsStatus NewApplicationsStatus? @map("new_applications_status")
+  benefitMr             String?               @map("benefit_mr")
+  contributionBands     Json?                 @map("contribution_bands")
+  applyAtMr             String?               @map("apply_at_mr")
+  applySteps            Json?                 @map("apply_steps")
+  checkStatusAt         String?               @map("check_status_at")
+  checkStatusAtMr       String?               @map("check_status_at_mr")
+
+  rules                 SchemeRule[]          @relation("SchemeRules")
+
+  @@map("schemes")
+}
+
+model SchemeRule {
+  id                    String   @id @default(uuid()) @db.Uuid
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  schemeId              String   @map("scheme_id") @db.Uuid
+  position              Int      @map("position")
+  ruleKey               String   @unique @map("rule_key")
+  checkEn               String   @map("check_en")
+  checkMr               String   @map("check_mr")
+  passIf                String   @db.Text @map("pass_if")
+  verifyFlag            Boolean  @default(false) @map("verify_flag")
+  reasonPassEn          String   @db.Text @map("reason_pass_en")
+  reasonPassMr          String   @db.Text @map("reason_pass_mr")
+  reasonFailEn          String   @db.Text @map("reason_fail_en")
+  reasonFailMr          String   @db.Text @map("reason_fail_mr")
+
+  scheme                Scheme   @relation("SchemeRules", fields: [schemeId], references: [id], onDelete: Cascade)
+
+  @@index([schemeId])
+  @@map("scheme_rules")
+}
+
+model Document {
+  id                    String              @id @default(uuid()) @db.Uuid
+  createdAt             DateTime            @default(now()) @map("created_at")
+  updatedAt             DateTime            @updatedAt @map("updated_at")
+  nameEn                String              @map("name_en")
+  nameMr                String              @map("name_mr")
+  whereToGet            String              @db.Text @map("where_to_get")
+  costRupees            Decimal?            @db.Decimal(12, 2) @map("cost_rupees")
+  costStatus            VerificationStatus  @default(verify) @map("cost_status")
+  daysToObtain          Int?                @map("days_to_obtain")
+  daysStatus            VerificationStatus  @default(verify) @map("days_status")
+  appealOfficer         String?             @db.Text @map("appeal_officer")
+  isGateDocument        Boolean             @default(false) @map("is_gate_document")
+  isShowOnly            Boolean             @default(false) @map("is_show_only")
+  position              Int?                @map("position")
+  whereToGetMr          String?             @map("where_to_get_mr")
+  appealOfficerMr       String?             @map("appeal_officer_mr")
+  documentType          String?             @map("document_type")
+  cropRegion            Json?               @map("crop_region")
+  isSample              Boolean             @default(false) @map("is_sample")
+  workerId              String?             @map("worker_id") @db.Uuid
+
+  worker                Worker?             @relation("DocumentWorker", fields: [workerId], references: [id], onDelete: SetNull)
+  ticks                 DocumentTick[]      @relation("DocumentTicks")
+
+  @@index([workerId])
+  @@map("documents")
+}
+
+model DocumentTick {
+  id                    String   @id @default(uuid()) @db.Uuid
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  profileId             String   @map("profile_id") @db.Uuid
+  documentId            String   @map("document_id") @db.Uuid
+  isTicked              Boolean  @default(false) @map("is_ticked")
+  tickedAt              DateTime? @map("ticked_at")
+
+  profile               Profile  @relation("ProfileDocumentTicks", fields: [profileId], references: [id], onDelete: Cascade)
+  document              Document @relation("DocumentTicks", fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, documentId])
+  @@index([documentId])
+  @@map("document_ticks")
+}
+
+model Certificate {
+  id                    String            @id @default(uuid()) @db.Uuid
+  createdAt             DateTime          @default(now()) @map("created_at")
+  updatedAt             DateTime          @updatedAt @map("updated_at")
+  profileId             String?           @map("profile_id") @db.Uuid
+  workerId              String?           @map("worker_id") @db.Uuid
+  photoUrl              String            @map("photo_url")
+  isSample              Boolean           @default(false) @map("is_sample")
+  extractionStatus      ExtractionStatus  @default(pending) @map("extraction_status")
+  confirmedAt           DateTime?         @map("confirmed_at")
+  confirmedDays         Int?              @map("confirmed_days")
+  confirmedBy           String?           @map("confirmed_by")
+  label                 String?           @map("label")
+  issuer                String?           @map("issuer")
+  issuerName            String?           @map("issuer_name")
+  issuerConfirmed       Boolean           @default(false) @map("issuer_confirmed")
+  issuedDate            DateTime?         @db.Date @map("issued_date")
+  issueDate             DateTime?         @db.Date @map("issue_date")
+  issuedOn              DateTime?         @db.Date @map("issued_on")
+  periodStart           DateTime?         @db.Date @map("period_start")
+  periodEnd             DateTime?         @db.Date @map("period_end")
+  periodStartDate       DateTime?         @db.Date @map("period_start_date")
+  periodEndDate         DateTime?         @db.Date @map("period_end_date")
+  datesConfirmed        Boolean           @default(false) @map("dates_confirmed")
+  source                String?           @map("source")
+
+  profile               Profile?          @relation("ProfileCertificates", fields: [profileId], references: [id], onDelete: Cascade)
+  worker                Worker?           @relation("CertificateWorker", fields: [workerId], references: [id], onDelete: SetNull)
+  extractions           CertificateExtraction[] @relation("CertificateExtractions")
+
+  @@index([profileId])
+  @@index([workerId])
+  @@map("certificates")
+}
+
+model CertificateExtraction {
+  id                    String           @id @default(uuid()) @db.Uuid
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+  certificateId         String           @map("certificate_id") @db.Uuid
+  fieldKey              CertificateField @map("field_key")
+  extractedValue        String           @map("extracted_value")
+  cropImageUrl          String           @map("crop_image_url")
+  isConfirmed           Boolean          @default(false) @map("is_confirmed")
+  confirmedAt           DateTime?        @map("confirmed_at")
+
+  certificate           Certificate      @relation("CertificateExtractions", fields: [certificateId], references: [id], onDelete: Cascade)
+
+  @@unique([certificateId, fieldKey])
+  @@map("certificate_extractions")
+}
+
+model Worker {
+  id                    String           @id @default(uuid()) @db.Uuid
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+  name                  String           @map("name")
+  age                   Int?             @map("age")
+  occupation            Occupation       @default(construction) @map("occupation")
+  state                 String           @default("Maharashtra") @map("state")
+  constructionDaysLast12Months Int       @default(0) @map("construction_days_last_12_months")
+  employmentStatus      EmploymentStatus @default(employed) @map("employment_status")
+  aadhaarShown          Boolean          @default(false) @map("aadhaar_shown")
+  isSample              Boolean          @default(false) @map("is_sample")
+
+  certificates          Certificate[]    @relation("CertificateWorker")
+  documents             Document[]       @relation("DocumentWorker")
+
+  @@map("workers")
+}

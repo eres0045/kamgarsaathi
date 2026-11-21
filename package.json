@@ -1,0 +1,48 @@
+{
+  "name": "kamgarsaathi",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": "22.x"
+  },
+  "description": "KamgarSaathi: Marathi-first scheme eligibility and document guide for construction and gig workers in Maharashtra.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.460.0",
+    "next": "^15.5.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "tailwind-merge": "^2.5.0",
+    "@prisma/client": "^6.7.0",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.5.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.6.0",
+    "prisma": "^6.7.0",
+    "tsx": "^4.19.0",
+    "@types/bcryptjs": "^2.4.6"
+  },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
+  }
+}
