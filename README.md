@@ -3,7 +3,7 @@
 **A Marathi-first gate agent for Maharashtra's construction and gig workers — it tells a worker which government schemes they are likely eligible for, why, and what to bring to the office.**
 
 🔗 **Live demo:** https://kamgarsaathi.onrender.com
-🎬 **Demo video (55 seconds):** [docs/demo/kamgarsaathi-demo.mp4](docs/demo/kamgarsaathi-demo.mp4)
+🎬 **Demo video (56 seconds):** [docs/demo/kamgarsaathi-demo.mp4](docs/demo/kamgarsaathi-demo.mp4)
 
 Built solo in the Codebenders IDE for **ACE Builders 2026, Problem Statement 5 — Citizens and Public Services ("Claim What's Yours")**.
 
@@ -19,11 +19,11 @@ KamgarSaathi is not another scheme list. It is a **gate agent**: the worker tell
 
 ---
 
-## Watch it work — 55 seconds
+## Watch it work — 56 seconds
 
 [![Watch the demo — Ramesh, 82 days to 96 days, gate flips red to green](docs/screenshots/video-poster.png)](docs/demo/kamgarsaathi-demo.mp4)
 
-*Click the image to play the demo video (55 s, no audio). The video is a real recording of the live app: Ramesh's profile at 82 days, the certificate extraction at 96 days, the gate flipping green, the ₹5,000 tool-kit aid appearing, the document quest, and the renewal countdown.*
+*Click the image to play the demo video (56 s, no audio). The video is a real recording of the live app: Ramesh's profile at 82 days, the certificate extraction at 96 days, the gate flipping green, the ₹5,000 tool-kit aid appearing, the document quest, and the renewal countdown.*
 
 ---
 
